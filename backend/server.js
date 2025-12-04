@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import bookmarkRoutes from "./routes/bookmark.routes.js";
+import courseRoutes from "./routes/course.routes.js";
+import { getCourses } from "./controllers/course.controller.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -34,6 +37,10 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/bookmarks", bookmarkRoutes);
+// Ensure GET /api/courses is available
+app.get("/api/courses", getCourses);
+app.use("/api/courses", courseRoutes);
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
