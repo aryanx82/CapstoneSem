@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './contact.css';
-import { sendContactMessage } from '../api/axios.js';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -9,34 +8,17 @@ export default function Contact() {
     subject: '',
     message: ''
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState('');
-  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
-    setStatus('');
-    setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setSubmitting(true);
-    setStatus('');
-    setError('');
-
-    try {
-      await sendContactMessage(formData);
-      setStatus('Message sent successfully!');
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || 'Failed to send message');
-    } finally {
-      setSubmitting(false);
-    }
+    console.log('Form submitted:', formData);
   };
 
   return (
@@ -90,8 +72,6 @@ export default function Contact() {
 
             <div className="contact-form">
               <h2>Send us a Message</h2>
-              {status && <p className="contact-status success">{status}</p>}
-              {error && <p className="contact-status error">{error}</p>}
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
@@ -141,8 +121,8 @@ export default function Contact() {
                   ></textarea>
                 </div>
                 
-                <button type="submit" className="submit-btn" disabled={submitting}>
-                  {submitting ? 'Sending...' : 'Send Message'}
+                <button type="submit" className="submit-btn">
+                  Send Message
                 </button>
               </form>
             </div>

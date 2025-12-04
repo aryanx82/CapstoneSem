@@ -5,7 +5,6 @@ import authRoutes from "./routes/auth.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import bookmarkRoutes from "./routes/bookmark.routes.js";
 import courseRoutes from "./routes/course.routes.js";
-import contactRoutes from "./routes/contact.routes.js";
 import { getCourses } from "./controllers/course.controller.js";
 import connectDB from "./config/db.js";
 
@@ -27,7 +26,6 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/bookmarks", bookmarkRoutes);
 app.get("/api/courses", getCourses);
 app.use("/api/courses", courseRoutes);
-app.use("/api/contact", contactRoutes);
 
 const PORT = process.env.PORT || 3001;
 const MONGO_URI = process.env.MONGO_URI;
