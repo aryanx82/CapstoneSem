@@ -8,7 +8,7 @@ const bookmarkSchema = new mongoose.Schema(
       required: true,
     },
     courseId: {
-      type: Number,
+      type: String,
       required: true,
     },
     title: String,

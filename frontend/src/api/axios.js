@@ -64,4 +64,18 @@ export const deleteCourse = (id) => {
     return api.delete(`/courses/${id}`);
 };
 
+// Bookmark API calls
+export const fetchBookmarks = () => {
+    return api.get("/bookmarks");
+};
+
+export const toggleBookmark = (coursePayload) => {
+    return api.post("/bookmarks/toggle", coursePayload);
+};
+
+// Contact API calls
+export const sendContactMessage = (payload) => {
+    return api.post("/contact", payload);
+};
+
 export default api;
