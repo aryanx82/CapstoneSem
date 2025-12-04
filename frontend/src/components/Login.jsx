@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoginUser } from '../api/axios';
-import './Auth.css';
+import '../pages/auth.css';
 
-const Login = ({ onSwitchToSignup }) => {
+const Login = () => {
+	const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,17 +29,11 @@ const Login = ({ onSwitchToSignup }) => {
       const response = await LoginUser(formData);
       const data = response.data;
 
-      // Store token in localStorage
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      // Redirect or update app state
       console.log('Login successful:', data);
-      alert('Login successful!');
-      
-      // You can add navigation here
-      // window.location.href = '/dashboard';
-      
+      navigate('/profile');
     } catch (err) {
       setError(err.response?.data?.message || err.message || 'Login failed');
     } finally {
@@ -46,49 +42,67 @@ const Login = ({ onSwitchToSignup }) => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-            />
+    <div className="auth-page">
+      <div className="auth-container">
+        <div className="auth-card">
+          <div className="auth-header">
+            <Link to="/" className="logo-link">
+              <span role="img" aria-label="cap" className="logo-icon">🎓</span>
+              <span className="logo-text">Course<span className="highlight">Hub</span></span>
+            </Link>
+            <h1>Welcome back!</h1>
+            <p>Sign in to continue your learning journey</p>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="Enter your password"
-            />
+          {error && (
+            <div className="auth-error">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            <div className="form-group">
+              <label htmlFor="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                autoComplete="email"
+                className={error ? 'error' : ''}
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+                className={error ? 'error' : ''}
+              />
+            </div>
+
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? 'Signing In...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="auth-footer">
+            <p>
+              Don't have an account?{' '}
+              <Link to="/signup" className="auth-link">
+                Sign up
+              </Link>
+            </p>
           </div>
-
-          {error && <div className="error-message">{error}</div>}
-
-          <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <p className="switch-auth">
-          Don't have an account?{' '}
-          <span onClick={onSwitchToSignup} className="switch-link">
-            Sign up
-          </span>
-        </p>
+        </div>
       </div>
     </div>
   );
